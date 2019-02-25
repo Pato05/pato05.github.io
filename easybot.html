@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>Telegram JS Easy Bot</title>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" as="style">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="preload" as="style">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
       #console {
         border: 1px solid #95a5a6;
@@ -26,6 +29,9 @@
     <div class="content wrapper card-panel">
       <div class="row">
         <div class="input-field col s12">
+          <i class="material-icons right tooltipped black-text"
+            data-tooltip="Inserisci qui il token che ti è stato inviato da @BotFather su Telegram"
+            data-position="bottom">help_outline</i>
           <input id="token" type="text" class="validate" required>
           <label for="token">Token del bot</label>
         </div>
@@ -59,6 +65,7 @@
         $("#commands").val("/start > Messaggio di avvio!\n/help > Menù di aiuto!");
         M.textareaAutoResize($('#commands'));
         $("#console").val("");
+        $(".tooltipped").tooltip();
         $("#startBot").click(function() {
           updateCommands();
           botToken = $("#token").val();
