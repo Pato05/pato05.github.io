@@ -56,7 +56,7 @@
       var botToken = "";
       var updateOffset = -1;
       var updateAnalyzer;
-      var cookies = getCOokies();
+      var cookies = getCookies();
       var commands = {
         "/start": "Messaggio di avvio!",
         "/help": "Menù di aiuto!"
@@ -64,7 +64,7 @@
       var started = 0;
       window.addEventListener("load", function() {
         if("commands" in cookies) {
-          $("#commands").val(cookies["commands"]);
+          $("#commands").val(cookies["commands"].split("///////////").join("\n"));
         } else $("#commands").val("/start > Messaggio di avvio!\n/help > Menù di aiuto!");
         if("botToken" in cookies) {
           $("#token").val(cookies["botToken"]);
@@ -132,7 +132,7 @@
               updateOffset++;
             }
             if(started == 0) {
-              setCookie("commands", $("#commands").val().split("\n").join("//////"), 30);
+              setCookie("commands", $("#commands").val().split("\n").join("///////////"), 30);
               setCookie("botToken", $("#token").val(), 30);
               log("Bot avviato! Attenzione: Se chiudi questa pagina, verrà anche arrestato il tuo bot!");
               $("#stopBot").removeClass("disabled");
