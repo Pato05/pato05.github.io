@@ -68,9 +68,9 @@
         } else $("#commands").val("/start > Messaggio di avvio!\n/help > Menù di aiuto!");
         if("botToken" in cookies) {
           $("#token").val(cookies["botToken"]);
-          M.textareaAutoResize($('#token'));
         }
         M.textareaAutoResize($('#commands'));
+        M.updateTextFields();
         $("#console").val("");
         $(".tooltipped").tooltip();
         $("#startBot").click(function() {
