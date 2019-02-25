@@ -58,10 +58,7 @@
       var updateOffset = -1;
       var updateAnalyzer;
       var cookies = getCookies();
-      var commands = {
-        "/start": "Messaggio di avvio!",
-        "/help": "Menù di aiuto!"
-      };
+      var commands = {};
       var started = 0;
       window.addEventListener("load", function() {
         if("commands" in cookies) {
@@ -74,6 +71,7 @@
         M.updateTextFields();
         $("#console").val("");
         $(".tooltipped").tooltip();
+        updateCommands();
         $("#startBot").click(function() {
           botToken = $("#token").val();
           if(botToken != "" && botToken) {
