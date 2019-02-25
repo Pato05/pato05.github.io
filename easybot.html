@@ -56,13 +56,20 @@
       var botToken = "";
       var updateOffset = -1;
       var updateAnalyzer;
+      var cookies = getCOokies();
       var commands = {
         "/start": "Messaggio di avvio!",
         "/help": "Menù di aiuto!"
       };
       var started = 0;
       window.addEventListener("load", function() {
-        $("#commands").val("/start > Messaggio di avvio!\n/help > Menù di aiuto!");
+        if("commands" in cookies) {
+          $("#commands").val(cookies["commands"]);
+        } else $("#commands").val("/start > Messaggio di avvio!\n/help > Menù di aiuto!");
+        if("botToken" in cookies) {
+          $("#token").val(cookies["botToken"]);
+          M.textareaAutoResize($('#token'));
+        }
         M.textareaAutoResize($('#commands'));
         $("#console").val("");
         $(".tooltipped").tooltip();
@@ -125,6 +132,8 @@
               updateOffset++;
             }
             if(started == 0) {
+              setCookie("commands", $("#commands").val().split("\n").join("//////"), 30);
+              setCookie("botToken", $("#token").val(), 30);
               log("Bot avviato! Attenzione: Se chiudi questa pagina, verrà anche arrestato il tuo bot!");
               $("#stopBot").removeClass("disabled");
               started = 1;
@@ -156,6 +165,26 @@
             },
           });
         }
+      }
+      function setCookie(name, value, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires=" + d.toGMTString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+      }
+
+      function getCookies() {
+        var cookies = document.cookie;
+        var splittedCookies = cookies.split(";");
+        var cookiesArr = {};
+        splittedCookies.forEach(function(cookie) {
+        	if(cookie.charAt(0) == " ") {
+          	cookie = cookie.substr(1);
+          }
+          var splittedValIndex = cookie.split("=");
+          cookiesArr[splittedValIndex[0]] = splittedValIndex[1];
+        });
+        return cookiesArr;
       }
     </script>
   </body>
