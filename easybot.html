@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <title>Telegram JS Easy Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+      #console {
+        border: 1px solid #95a5a6;
+        border-radius: 10px;
+        resize: none;
+        padding: 20px;
+        height: 200px;
+        width: 100%;
+        color: #000;
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo center">Telegram Easy JS Bot</a>
+      </div>
+    </nav>
+    <div class="content wrapper card-panel">
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="token" type="text" class="validate" required>
+          <label for="token">Token del bot</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea id="commands" class="materialize-textarea"></textarea>
+          <label for="commands">Comandi del bot</label>
+        </div>
+      </div>
+      <div class="row">
+        <label for="console">Console</label>
+        <textarea id="console" disabled></textarea>
+      </div>
+      <button class="btn waves-effect waves-light" id="updateCommands">Aggiorna lista comandi</button>
+      <button class="btn waves-effect waves-light" id="startBot">Avvia!</button>
+      <button class="btn waves-effect waves-light disabled" id="stopBot">Arresta</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script type="text/javascript">
+      var botToken = "";
+      var updateOffset = -1;
+      var updateAnalyzer;
+      var commands = {
+        "/start": "Messaggio di avvio!",
+        "/help": "Menù di aiuto!"
+      };
+      var started = 0;
+      window.addEventListener("load", function() {
+        $("#commands").val("/start > Messaggio di avvio!\n/help > Menù di aiuto!");
+        M.textareaAutoResize($('#commands'));
+        $("#console").val("");
+        $("#startBot").click(function() {
+          updateCommands();
+          botToken = $("#token").val();
+          if(botToken != "" && botToken) {
+            $("#startBot").addClass("disabled");
+            log("Avviando il bot... Connessione in corso ai server telegram...");
+            startUpdateAnalyzer();
+          } else {
+            log("Bot non avviato! Bot token vuoto!");
+          }
+        });
+        $("#stopBot").click(function() {
+          started = "stop";
+          $("#stopBot").addClass("disabled");
+          log("Richiesta di arresto inviata!");
+        });
+        $("#updateCommands").click(updateCommands);
+      });
+      function log(text) {
+        $("#console").val($("#console").val() + text + "\n");
+      }
+      function updateCommands() {
+        $(this).addClass("disabled");
+        log("Aggiornamento lista comandi in corso...");
+        commands = {};
+        var commandsString = $("#commands").val();
+        var c = commandsString.split("\n");
+        for(var command in c) {
+          var commandArr = c[command].split(" > ");
+          commands[commandArr[0]] = commandArr[1];
+        }
+        log("Aggiornamento lista comandi completato!");
+        $(this).removeClass("disabled");
+      }
+      function startUpdateAnalyzer() {
+        $.ajax({
+          url: "https://api.telegram.org/bot" + botToken + "/getUpdates",
+          async: true,
+          method: "POST",
+          data: {
+            offset: updateOffset
+          },
+          dataType: "json",
+          error: function(xhr) {
+            var response = xhr.responseText;
+            log("Errore nella connessione: "+response+"\nPossibile token errato.");
+            $("#stopBot").addClass("disabled");
+            $("#startBot").removeClass("disabled");
+            clearInterval(updateAnalyzer);
+          },
+          success: function(response) {
+            var update = {};
+            if(response["result"] !== [] && response["result"] && response["result"].length > 0) {
+              update = response["result"][0];
+              updateOffset = update["update_id"];
+              log("Analisi update #"+updateOffset);
+              analyzeUpdate(update);
+              updateOffset++;
+            }
+            if(started == 0) {
+              log("Bot avviato! Attenzione: Se chiudi questa pagina, verrà anche arrestato il tuo bot!");
+              $("#stopBot").removeClass("disabled");
+              started = 1;
+            }
+            if(started == "stop") {
+              $("#startBot").removeClass("disabled");
+              log("Bot arrestato!");
+              started = 0;
+            } else startUpdateAnalyzer();
+          }
+        });
+      }
+      function analyzeUpdate(update) {
+        var text = update["message"]["text"];
+        var chat_id = update["message"]["chat"]["id"];
+        if(text in commands) {
+          $.ajax({
+            url: "https://api.telegram.org/bot" + botToken + "/sendMessage",
+            async: true,
+            method: "POST",
+            data: {
+              chat_id: chat_id,
+              text: commands[text]
+            },
+            dataType: "json",
+            error: function(xhr) {
+              var response = xhr.responseText;
+              log("Errore nell'invio del messaggio: "+response);
+            },
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
