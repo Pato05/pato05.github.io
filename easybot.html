@@ -28,10 +28,10 @@
     </nav>
     <div class="content wrapper card-panel">
       <div class="row">
+        <i class="material-icons right tooltipped black-text"
+          data-tooltip="Inserisci qui il token che ti è stato inviato da @BotFather su Telegram"
+          data-position="bottom">help_outline</i>
         <div class="input-field col s12">
-          <i class="material-icons right tooltipped black-text"
-            data-tooltip="Inserisci qui il token che ti è stato inviato da @BotFather su Telegram"
-            data-position="bottom">help_outline</i>
           <input id="token" type="text" class="validate" required>
           <label for="token">Token del bot</label>
         </div>
@@ -67,7 +67,6 @@
         $("#console").val("");
         $(".tooltipped").tooltip();
         $("#startBot").click(function() {
-          updateCommands();
           botToken = $("#token").val();
           if(botToken != "" && botToken) {
             $("#startBot").addClass("disabled");
