@@ -12,20 +12,23 @@
   </head>
   <body>
     <div id="loader"></div>
-    <div id="content">
-      <nav>
+    <main>
+      <nav class="blue darken-1">
         <div class="nav-wrapper">
           <a href="#" class="brand-logo center">Pato05</a>
+          <a href="#" data-target="sidebar-slide" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
         </div>
       </nav>
       <div class="container">
-        <p>Ciao! Benvenuto sul mio GitHub pages!</p>
+        <h5 class="black-text">Ciao! Benvenuto sul mio GitHub pages! Scegli un progetto dal menù!</h5>
       </div>
-      <ul id="slide-out" class="sidenav sidenav-fixed">
-        <li><a class="waves-effect" href="/tg-js-bot"><i class="material-icons left">sms</i>Easy Telegram Bot</a></li>
-        <li><a class="waves-effect" href="/PatoBot"><i class="material-icons left">code</i>PatoBot</a></li>
-      </ul>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
-    </div>
+    </main>
+    <ul id="sidebar-slide" class="sidenav sidenav-fixed">
+      <li><a class="waves-effect" href="/tg-js-bot"><i class="material-icons left">sms</i>Easy Telegram Bot</a></li>
+      <li><a class="waves-effect" href="/PatoBot"><i class="material-icons left">code</i>PatoBot</a></li>
+    </ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script src="js/main.js" defer></script>
   </body>
 </html>
