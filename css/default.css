@@ -25,7 +25,7 @@ main {
   display: none;
 }
 
-header, main, footer {
+header, main {
   padding-left: 300px;
 }
 
