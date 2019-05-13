@@ -4,5 +4,6 @@ $(document).ready(function() {
   setTimeout(function() {
     $("#loader").css("display", "none");
     $("main").fadeIn();
+    $(".modal").modal();
   }, 0);
 });
