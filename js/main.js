@@ -18,7 +18,7 @@ function buildSidebar() {
   let sidebar = $('<ul>').addClass('sidenav sidenav-fixed').prop('id', 'sidebar-slide');
   for(let item of sidebarItems) {
     let newItem = $('<li>');
-    if(document.location.pathname == item['href']) newItem.addClass('active');
+    if(document.location.pathname.replace('/', '') == item['href'].replace('/', '')) newItem.addClass('active');
     newItem.append($('<a>').addClass('waves-effect').prop('href', item['href']).append($('<i>').addClass('material-icons left').html(item['icon'])).append(document.createTextNode(item['name'])));
     sidebar.append(newItem);
   }
