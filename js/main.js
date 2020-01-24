@@ -17,7 +17,7 @@ function buildSidebar() {
   ];
   let sidebar = $('<ul>').addClass('sidenav sidenav-fixed').prop('id', 'sidebar-slide');
   let np = document.location.pathname;
-  np = np.endsWith('/') ? np.substr(np.length, np.length - 1) : np;
+  np = np.endsWith('/') ? np.substr(0, np.length - 1) : np;
   for(let item of sidebarItems) {
     let newItem = $('<li>');
     if(np == item['href']) newItem.addClass('active');
