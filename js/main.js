@@ -16,9 +16,11 @@ function buildSidebar() {
     {'name':'AdbFastbootInstaller', 'icon':'adb', 'href':'/AdbFastbootInstaller'}
   ];
   let sidebar = $('<ul>').addClass('sidenav sidenav-fixed').prop('id', 'sidebar-slide');
+  let np = document.location.pathname;
+  np = np.endsWith('/') ? np.substr(np.length, np.length - 1) : np;
   for(let item of sidebarItems) {
     let newItem = $('<li>');
-    if(document.location.pathname.replace('/', '') == item['href'].replace('/', '')) newItem.addClass('active');
+    if(np == item['href']) newItem.addClass('active');
     newItem.append($('<a>').addClass('waves-effect').prop('href', item['href']).append($('<i>').addClass('material-icons left').html(item['icon'])).append(document.createTextNode(item['name'])));
     sidebar.append(newItem);
   }
